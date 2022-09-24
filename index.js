@@ -40,6 +40,9 @@ const PROCESS_STATUS = {
   SUCCESS: "SUCCESS",
 };
 
+const secretKey =
+  process.env.SECRETKEY || "6Ldb9_gfAAAAAHlu5NBDdueW-JHSaK7rsGx8XtlE";
+
 const API_URL_VOUCHER =
   process.env.API_VOUCHER || "https://api-admin.shopdi.io/api/v1/bcvouchers";
 
@@ -97,6 +100,27 @@ cron.schedule("*/20 * * * * *", async () => {
       }
     }
   }
+});
+
+app.post("/captcha", async (req, res) => {
+  const { captcha } = req.body;
+
+  if (!captcha) {
+    res.json({ success: false, message: "captcha token is undefined" });
+  }
+
+  const url = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${captcha}`;
+  const body = await axios.post(url);
+  const { data } = body;
+
+  if (!data.success || data.score < 0.4) {
+    return res.status(200).send({
+      success: false,
+      message: "You might be a robot, sorry!.",
+      score: data.score,
+    });
+  }
+  res.status(200).send({ success: true });
 });
 
 app.post("/order", async function (req, res) {
