@@ -97,7 +97,7 @@ async function paymentSuccess(orderPending) {
       orderCode: id.toString(),
       amount: convertToCoin(amount / decimal),
       value,
-      expiredDate: moment(new Date()).format("DD/MM/YYYY"),
+      expiredDate: moment(new Date()).add(1, "years").format("DD/MM/YYYY"),
       phoneOrEmail: orderPending.emailorphone,
     });
 
@@ -107,7 +107,7 @@ async function paymentSuccess(orderPending) {
           orderCode: id.toString(),
           amount: convertToCoin(amount / decimal),
           value,
-          expiredDate: moment(new Date()).format("DD/MM/YYYY"),
+          expiredDate: moment(new Date()).add(1, "years").format("DD/MM/YYYY"),
           phoneOrEmail: orderPending.emailorphone,
         },
         publicKey: publicKeyVoucher,
