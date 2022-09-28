@@ -74,7 +74,7 @@ async function getOrdersPendingStatus() {
 }
 
 async function createVoucher(params) {
-  console.log(params);
+  console.log(params, API_URL_VOUCHER);
   return await axios.post(API_URL_VOUCHER, {
     ...params,
   });
@@ -138,7 +138,6 @@ cron.schedule("*/20 * * * * *", async () => {
       const success = await myContract.methods.ids(id).call();
       console.log("success trasaction", success);
       if (success) {
-        console.log("Payment success data", orderPending);
         await paymentSuccess(orderPending);
       }
     }
